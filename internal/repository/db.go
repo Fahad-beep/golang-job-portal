@@ -2,12 +2,13 @@ package repository
 
 import (
 	"database/sql"
+	"os"
 
 	_ "modernc.org/sqlite"
 )
 
 func InitDB() (*sql.DB, error) {
-	db, err := sql.Open("sqlite", "./jobportal.db")
+	db, err := sql.Open("sqlite", os.Getenv("DB_PATH"))
 	if err != nil {
 		return nil, err
 	}
