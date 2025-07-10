@@ -11,4 +11,5 @@ func InitRoutes(r *gin.Engine, db *sql.DB) {
 	r.POST("/login", handlers.LoginHandler(db))
 	r.POST("/register", handlers.RegisterHandler(db))
 	r.GET("/user/:id", handlers.GetUserByIdHandler(db))
+	r.PUT("/user/:id", handlers.UpdateUserHandler(db))
 }
