@@ -6,7 +6,7 @@ import (
 )
 
 func CreateUser(db *sql.DB, user *models.User) error {
-	_, err := db.Exec(`INSERT INTO users (username, password, email) VALUES (?, ?, ?)`, user.Username, user.Password, user.Email)
+	_, err := db.Exec(`INSERT INTO users (username, password, email, is_admin) VALUES (?, ?, ?, ?)`, user.Username, user.Password, user.Email, user.IsAdmin)
 	return err
 }
 
@@ -34,4 +34,12 @@ func GetUserByUserName(db *sql.DB, username string) (*models.User, error) {
 	}
 	return user, nil
 
+}
+
+func UpdateUserProfile(db *sql.DB, user *models.User) (*models.User, error) {
+	_, err := db.Exec("UPDATE users SET username = ?, email = ? WHERE id = ?", user.Username, user.Email, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }

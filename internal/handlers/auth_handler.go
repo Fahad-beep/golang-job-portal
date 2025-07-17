@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"job_portal/internal/models"
 	"job_portal/internal/services"
 	"net/http"
@@ -32,6 +33,7 @@ func RegisterHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		fmt.Print(user)
 		err := services.RegisterUser(db, &user)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

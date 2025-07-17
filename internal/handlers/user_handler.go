@@ -10,22 +10,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateUserHandler(db *sql.DB) gin.HandlerFunc {
+func UpdateUserProfileHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var userUpdate struct {
-			Username string `json:"username"`
-			Password string `json:"password"`
-		}
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user ID"})
 			return
 		}
+		var userUpdate struct {
+			Username string `json:"username"`
+			Email string `json:"email"`
+		} 
 		if err := c.ShouldBindJSON(&userUpdate); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		fmt.Print(id)
+
+		userID := c.GetInt("userID")
+		isAdmin := c.GetBool("isAdmin")
+		fmt.Print(isAdmin)
+
+		if !isAdmin && userID != id {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "unauthorized to update this profile"})
+			return
+		}
+
+		updateUser, err := services.UpdateUserProfile(db, id, userUpdate.Username, userUpdate.Email)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, updateUser)
 	}
 }
 func GetUserByIdHandler(db *sql.DB) gin.HandlerFunc {

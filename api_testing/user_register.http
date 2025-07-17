@@ -2,7 +2,8 @@ POST http://localhost:8080/register
 content-type: application/json
 
 {
-    "username": "habib",
+    "username": "Fahad4",
     "password": "+}</4Mi1",
-    "email": "mfahadadil2005@gmail.com"
+    "email": "mfahadadil2008@gmail.com",
+    "is_admin": true
 }
